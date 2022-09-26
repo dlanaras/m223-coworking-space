@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -32,7 +33,7 @@ public class User {
     @Column(nullable = false)
     private boolean isAdmin;
 
-    @ManyToOne
+    @JoinColumn(name="booking_id")
     private Set<Booking> bookings;
 
     public Long getId() {
