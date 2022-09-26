@@ -1,5 +1,7 @@
 package dlanaras.com.github.services;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -20,7 +22,7 @@ public class BookingService {
         return query.getResultList();
     }
 
-    public List<Booking> findAll(int userId) {
+    public List<Booking> findAll(Long userId) {
         var query = entityManager.createQuery("SELECT b FROM Booking b JOIN User u ON b.user=u WHERE u.id= :userId");
         query.setParameter("userId", userId);
         return query.getResultList();
@@ -40,5 +42,20 @@ public class BookingService {
     public void deleteBooking(Long id) {
         var entity = entityManager.find(Booking.class, id);
         entityManager.remove(entity);
+    }
+
+    public Float getLatestBookingPrice(Long userId) {
+        List<Booking> userBookings = this.findAll(userId);
+
+        Comparator<Booking> dateComparator = Comparator.comparing(Booking::getStartDate); // What the hell is this java, just use LINQ
+        Arrays.sort((userBookings.stream().toArray(Booking[] ::new)), dateComparator);
+
+        Booking newestBooking = userBookings.toArray(Booking[] ::new)[0];
+
+        return newestBooking.getDayPrice();
+    }
+
+    public Booking getBooking(Long bookingId) {
+        return entityManager.find(Booking.class, bookingId);
     }
 }
