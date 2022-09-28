@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import dlanaras.com.github.exceptions.InvalidValueException;
+
 @Entity
 public class User {
     @Id
@@ -63,8 +65,13 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String email) throws InvalidValueException {
+        //this is the write way fuck regex
+        if (email.indexOf(".") != -1 && email.indexOf("@") != -1) {
+            this.email = email;
+        } else {
+            throw new InvalidValueException("wrong email format: " + email);
+        }
     }
 
     public String getPassword() {

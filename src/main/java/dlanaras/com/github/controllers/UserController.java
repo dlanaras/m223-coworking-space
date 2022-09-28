@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import dlanaras.com.github.exceptions.InvalidValueException;
 import dlanaras.com.github.exceptions.NullValueException;
 import dlanaras.com.github.models.User;
 import dlanaras.com.github.services.UserService;
@@ -40,6 +41,9 @@ public class UserController {
         try {
             User createdUser = userService.createUser(user);
             return Response.ok(createdUser).build();
+        } catch (InvalidValueException e) {
+            System.out.println("invalid email: " + e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (Exception e) {
             System.out.println(e);
             return Response.status(Response.Status.BAD_REQUEST).build();
