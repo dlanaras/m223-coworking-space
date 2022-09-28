@@ -30,3 +30,7 @@ Die Daten werden in einer PostgreSQL-Datenbank gespeichert. In der Entwicklungsu
 ## Automatische Tests
 
 Die automatischen Tests können mit `./mvnw quarkus:test` ausgeführt werden. Für die automatischen Tests wird nicht die PostgreSQL-Datenbank verwendet, sondern eine H2-Datenbank, welche sich im Arbeitsspeicher während der Ausführung befindet.
+
+# Anmelde Daten First Start
+    EMAIL: lfredi0@eepurl.com
+    PASSWORT: 1QWrfIEgoq
