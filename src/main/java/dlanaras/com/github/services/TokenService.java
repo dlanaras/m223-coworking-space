@@ -13,7 +13,7 @@ import io.smallrye.jwt.build.Jwt;
 @ApplicationScoped
 public class TokenService {
     public String createToken(User user) {
-        String token = Jwt.issuer("https://github.com/dlanaras")
+        String token = Jwt.issuer("https://example.com/issuer")
                 .upn(user.getId().toString())
                 .groups(new HashSet<>(Arrays.asList(user.isAdmin() ? "Admin" : "User")))
                 .claim(Claims.email.name(), user.getEmail())

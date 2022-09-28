@@ -15,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
 import dlanaras.com.github.exceptions.InvalidValueException;
 import dlanaras.com.github.exceptions.NullValueException;
 import dlanaras.com.github.models.User;
@@ -25,6 +27,9 @@ public class UserController {
 
     @Inject
     UserService userService;
+
+    @Inject
+    JsonWebToken jwt;
 
     @GET
     @RolesAllowed({"Admin"})

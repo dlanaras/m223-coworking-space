@@ -11,6 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
 import dlanaras.com.github.exceptions.InvalidLoginException;
 import dlanaras.com.github.models.User;
 import dlanaras.com.github.models.dto.Login;
@@ -19,6 +21,8 @@ import dlanaras.com.github.services.UserService;
 @Path("/")
 public class AuthenticationController {
 
+    @Inject
+    JsonWebToken jwt;
     @Inject
     private UserService userService;
 

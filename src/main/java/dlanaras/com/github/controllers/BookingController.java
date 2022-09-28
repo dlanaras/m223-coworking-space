@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
 import dlanaras.com.github.exceptions.NullValueException;
 import dlanaras.com.github.models.Booking;
 import dlanaras.com.github.services.BookingService;
@@ -25,6 +27,9 @@ import dlanaras.com.github.services.BookingService;
 public class BookingController {
     @Inject
     BookingService bookingService;
+
+    @Inject
+    JsonWebToken jwt;
 
     @GET
     @RolesAllowed({ "User", "Admin" })
