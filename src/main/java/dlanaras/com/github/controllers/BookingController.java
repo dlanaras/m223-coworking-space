@@ -12,8 +12,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import dlanaras.com.github.exceptions.NullValueException;
 import dlanaras.com.github.models.Booking;
@@ -25,14 +27,14 @@ public class BookingController {
     BookingService bookingService;
 
     @GET
-    @RolesAllowed({"User", "Admin"})
+    @RolesAllowed({ "User", "Admin" })
     @Produces(MediaType.APPLICATION_JSON)
     public List<Booking> index() {
         return bookingService.findAll();
     }
 
     @POST
-    @RolesAllowed({"Admin"})
+    @RolesAllowed({ "Admin" })
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(Booking booking) {
@@ -46,7 +48,7 @@ public class BookingController {
     }
 
     @PUT
-    @RolesAllowed({"Admin"})
+    @RolesAllowed({ "Admin" })
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBooking(Booking booking) {
@@ -62,7 +64,7 @@ public class BookingController {
     }
 
     @Path("/{id}")
-    @RolesAllowed({"Admin"})
+    @RolesAllowed({ "Admin" })
     @DELETE
     public Response deleteBooking(Long id) {
         try {
@@ -75,7 +77,7 @@ public class BookingController {
     }
 
     @Path("/review/{id}/{accept}")
-    @RolesAllowed({"Admin"})
+    @RolesAllowed({ "Admin" })
     @GET
     public Response changeBookingStatus(Long id, Boolean accept) {
         Booking booking = bookingService.getBooking(id);
@@ -88,10 +90,15 @@ public class BookingController {
     }
 
     @Path("/price/{id}")
-    @RolesAllowed({"User", "Admin"})
+    @RolesAllowed({ "User", "Admin" })
     @GET
-    public Response getNewestBookingPrice(Long id) {
+    public Response getNewestBookingPrice(Long id, @Context SecurityContext ctx) {
         try {
+
+            if (ctx.isUserInRole("User")) {
+                id = Long.parseLong(ctx.getUserPrincipal().getName());
+            }
+
             return Response.ok(bookingService.getLatestBookingPrice(id)).build();
         } catch (NullValueException e) {
             System.out.println(e);
@@ -100,13 +107,18 @@ public class BookingController {
     }
 
     @Path("/cancel/{id}")
-    @RolesAllowed({"User", "Admin"})
+    @RolesAllowed({ "User", "Admin" })
     @GET
-    public Response cancelBooking(Long id) {
-        // TODO: get user id through claim if not admin
+    public Response cancelBooking(Long id, @Context SecurityContext ctx) {
+        Long userId = null;
+
+        if (ctx.isUserInRole("User")) {
+            userId = Long.parseLong(ctx.getUserPrincipal().getName());
+        }
+
         Booking booking = bookingService.getBooking(id);
 
-        if (booking == null)
+        if (userId == null ? booking == null : booking == null || (booking.getUser()).getId() != userId)
             return Response.status(Response.Status.BAD_REQUEST).build();
 
         booking.setIsAccepted(false);

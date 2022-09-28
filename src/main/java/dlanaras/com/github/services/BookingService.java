@@ -50,7 +50,7 @@ public class BookingService {
     public void deleteBooking(Long id) throws NullValueException {
         var entity = entityManager.find(Booking.class, id);
         if (entity == null) {
-            throw new NullValueException("No user with id: " + id + " was found");
+            throw new NullValueException("No booking with id: " + id + " was found");
         }
         entityManager.remove(entity);
     }
