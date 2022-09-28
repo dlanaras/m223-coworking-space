@@ -11,10 +11,10 @@ INSERT INTO public."User" (
 
 INSERT INTO public."Booking" (
 "dayPrice", "endDate", "startDate", "needsLaptop", user_id) VALUES (
-'71.86'::real, '2022-09-26'::date, '5/11/2022'::date, false::boolean, '2'::bigint)
+'71.86'::real, '2022-09-26'::date, '5/11/2022'::date, false::boolean, 2::bigint)
  returning booking_id;
 
 INSERT INTO public."Booking" (
 "dayPrice", "endDate", "startDate", "needsLaptop", user_id) VALUES (
-'66.31'::real, '9/29/2021'::date, '10/26/2021'::date, false::boolean, '2'::bigint)
+'66.31'::real, '9/29/2021'::date, '10/26/2021'::date, false::boolean, 2::bigint)
  returning booking_id;
