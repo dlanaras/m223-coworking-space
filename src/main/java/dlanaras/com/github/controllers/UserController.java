@@ -2,6 +2,7 @@ package dlanaras.com.github.controllers;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.TransactionRequiredException;
 import javax.ws.rs.Consumes;
@@ -25,12 +26,14 @@ public class UserController {
     UserService userService;
 
     @GET
+    @RolesAllowed({"Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> index() {
         return userService.findAll();
     }
 
     @POST
+    @RolesAllowed({"Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(User user) {
@@ -44,6 +47,7 @@ public class UserController {
     }
 
     @PUT
+    @RolesAllowed({"Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(User user) {
@@ -59,6 +63,7 @@ public class UserController {
     }
 
     @Path("/{id}")
+    @RolesAllowed({"Admin"})
     @DELETE
     public Response deleteUser(Long id) {
         try {

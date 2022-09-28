@@ -1,5 +1,7 @@
 package dlanaras.com.github.controllers;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 import javax.ws.rs.Consumes;
@@ -22,6 +24,7 @@ public class AuthenticationController {
 
     @POST
     @Path("/register")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(User user) {
@@ -39,6 +42,7 @@ public class AuthenticationController {
 
     @POST
     @Path("/login")
+    @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(Login login) {

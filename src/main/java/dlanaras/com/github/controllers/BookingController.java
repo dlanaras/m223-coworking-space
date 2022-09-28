@@ -2,6 +2,7 @@ package dlanaras.com.github.controllers;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.TransactionRequiredException;
 import javax.ws.rs.Consumes;
@@ -24,12 +25,14 @@ public class BookingController {
     BookingService bookingService;
 
     @GET
+    @RolesAllowed({"User", "Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     public List<Booking> index() {
         return bookingService.findAll();
     }
 
     @POST
+    @RolesAllowed({"Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(Booking booking) {
@@ -43,6 +46,7 @@ public class BookingController {
     }
 
     @PUT
+    @RolesAllowed({"Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBooking(Booking booking) {
@@ -58,6 +62,7 @@ public class BookingController {
     }
 
     @Path("/{id}")
+    @RolesAllowed({"Admin"})
     @DELETE
     public Response deleteBooking(Long id) {
         try {
@@ -70,6 +75,7 @@ public class BookingController {
     }
 
     @Path("/review/{id}/{accept}")
+    @RolesAllowed({"Admin"})
     @GET
     public Response changeBookingStatus(Long id, Boolean accept) {
         Booking booking = bookingService.getBooking(id);
@@ -82,6 +88,7 @@ public class BookingController {
     }
 
     @Path("/price/{id}")
+    @RolesAllowed({"User", "Admin"})
     @GET
     public Response getNewestBookingPrice(Long id) {
         try {
@@ -93,6 +100,7 @@ public class BookingController {
     }
 
     @Path("/cancel/{id}")
+    @RolesAllowed({"User", "Admin"})
     @GET
     public Response cancelBooking(Long id) {
         // TODO: get user id through claim if not admin
