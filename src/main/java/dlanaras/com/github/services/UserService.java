@@ -19,8 +19,11 @@ public class UserService {
     @Inject
     private EntityManager entityManager;
 
+    @Inject
+    private TokenService tokenService;
+
     public List<User> findAll() {
-        var query = entityManager.createQuery("FROM Entry", User.class);
+        var query = entityManager.createQuery("FROM User", User.class);
         return query.getResultList();
     }
 
@@ -57,27 +60,37 @@ public class UserService {
     }
 
     public String login(Login login) throws InvalidLoginException {
-        var entity = entityManager.find(User.class, login.getEmail());
+        var query = entityManager.createQuery("SELECT u FROM User u Where u.email = :email");
+        query.setParameter("email", login.getEmail());
+        User entity = (User) query.getSingleResult();
+
         if (entity == null) {
             throw new InvalidLoginException("Email doesn't exist");
-        } else if (entity.getPassword().equals(login.getPassword())) {
-            throw new InvalidLoginException("Wrong Password");
+        } else if (entity.getPassword() == login.getPassword()) {
+            throw new InvalidLoginException("Wrong Password: " + entity.getPassword() + " vs " + login.getPassword());
         }
-
-        //TODO: return real token
-        return "THIS IS A TOKEN";
+        // We do a little french
+        String leTokenSécurisé = tokenService.createToken(entity);
+        return leTokenSécurisé;
     }
-    
+
     public String register(User user) throws EntityExistsException, Exception {
         try {
+            List<User> users = this.findAll();
+
+            if (users.isEmpty()) {
+                user.setAdmin(true);
+            } else {
+                user.setAdmin(false);
+            }
+
             createUser(user);
         } catch (EntityExistsException e) {
             throw e;
         } catch (Exception e) {
             throw e;
         }
-
-        //TODO: return real token
-        return "This is a token";
+        String leTokenSécurisé = tokenService.createToken(user);
+        return leTokenSécurisé;
     }
 }

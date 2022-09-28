@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Booking {
     @Id
@@ -36,6 +38,7 @@ public class Booking {
     private Boolean needsLaptop;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="user_id")
     private User user;
 

@@ -3,11 +3,14 @@ package dlanaras.com.github.services;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.eclipse.microprofile.jwt.Claims;
 
 import dlanaras.com.github.models.User;
 import io.smallrye.jwt.build.Jwt;
 
+@ApplicationScoped
 public class TokenService {
     public String createToken(User user) {
         String token = Jwt.issuer("https://github.com/dlanaras")

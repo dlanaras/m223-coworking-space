@@ -16,7 +16,7 @@ import dlanaras.com.github.models.User;
 import dlanaras.com.github.models.dto.Login;
 import dlanaras.com.github.services.UserService;
 
-
+@Path("/")
 public class AuthenticationController {
 
     @Inject
