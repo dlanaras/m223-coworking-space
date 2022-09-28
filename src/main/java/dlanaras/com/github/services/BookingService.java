@@ -47,6 +47,7 @@ public class BookingService {
         }
     }
 
+    @Transactional
     public void deleteBooking(Long id) throws NullValueException {
         var entity = entityManager.find(Booking.class, id);
         if (entity == null) {
@@ -58,7 +59,7 @@ public class BookingService {
     public Float getLatestBookingPrice(Long userId) throws NullValueException {
         List<Booking> userBookings = this.findAll(userId);
 
-        if(userBookings == null) {
+        if(userBookings.isEmpty()) {
             throw new NullValueException("No bookings for user: " + userId);
         }
 

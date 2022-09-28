@@ -66,12 +66,7 @@ public class User {
     }
 
     public void setEmail(String email) throws InvalidValueException {
-        //this is the write way fuck regex
-        if (email.indexOf(".") != -1 && email.indexOf("@") != -1) {
-            this.email = email;
-        } else {
-            throw new InvalidValueException("wrong email format: " + email);
-        }
+        this.email = email;
     }
 
     public String getPassword() {

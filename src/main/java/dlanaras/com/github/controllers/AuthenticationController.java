@@ -22,8 +22,6 @@ import dlanaras.com.github.services.UserService;
 public class AuthenticationController {
 
     @Inject
-    JsonWebToken jwt;
-    @Inject
     private UserService userService;
 
     @POST

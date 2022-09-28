@@ -10,6 +10,7 @@ import javax.persistence.TransactionRequiredException;
 import javax.transaction.Transactional;
 
 import dlanaras.com.github.exceptions.InvalidLoginException;
+import dlanaras.com.github.exceptions.InvalidValueException;
 import dlanaras.com.github.exceptions.NullValueException;
 import dlanaras.com.github.models.User;
 import dlanaras.com.github.models.dto.Login;
@@ -28,15 +29,8 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(User user) throws EntityExistsException, Exception {
-        try {
-            entityManager.persist(user);
-        } catch (EntityExistsException e) {
-            throw e;
-        } catch (Exception e) {
-            throw e;
-        }
-
+    public User createUser(User user) throws EntityExistsException, InvalidValueException, Exception {
+        entityManager.persist(user);
         return user;
     }
 
@@ -51,6 +45,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void deleteUser(Long id) throws NullValueException {
         var entity = entityManager.find(User.class, id);
         if (entity == null) {
@@ -60,6 +55,7 @@ public class UserService {
     }
 
     public String login(Login login) throws InvalidLoginException {
+
         var query = entityManager.createQuery("SELECT u FROM User u Where u.email = :email");
         query.setParameter("email", login.getEmail());
         User entity = (User) query.getSingleResult();
@@ -74,8 +70,8 @@ public class UserService {
         return leTokenSécurisé;
     }
 
-    public String register(User user) throws EntityExistsException, Exception {
-        try {
+    public String register(User user) throws EntityExistsException, InvalidValueException, Exception {
+
             List<User> users = this.findAll();
 
             if (users.isEmpty()) {
@@ -85,11 +81,7 @@ public class UserService {
             }
 
             createUser(user);
-        } catch (EntityExistsException e) {
-            throw e;
-        } catch (Exception e) {
-            throw e;
-        }
+
         String leTokenSécurisé = tokenService.createToken(user);
         return leTokenSécurisé;
     }

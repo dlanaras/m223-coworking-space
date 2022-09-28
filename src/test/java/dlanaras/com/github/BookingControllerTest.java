@@ -64,7 +64,7 @@ public class BookingControllerTest {
         try {
             user.setEmail("lfredi0@eepurl.com");
         } catch (InvalidValueException e) {
-
+            System.out.print(e);
         }
         user.setPassword("1QWrfIEgoq");
         user.setId(1L);
@@ -98,7 +98,7 @@ public class BookingControllerTest {
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .when().get("/bookings/price/1")
+                .when().get("/bookings/price/2")
                 .then()
                 .statusCode(200);
     }
