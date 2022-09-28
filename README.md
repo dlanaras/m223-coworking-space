@@ -11,6 +11,8 @@
 1. Starte das Projekt mit dem Kommando `Quarkus: Debug current Quarkus Project`
 1. Probiere die Client-Applikation unter http://localhost:8080 aus.
 1. Schaue die API auf http://localhost:8080/q/swagger-ui/ an.
+1. Private Key unter resources als privateKey.pem speichern
+1. Public Key unter resources als publicKey.pem speicher
 
 ## Datenbank
 

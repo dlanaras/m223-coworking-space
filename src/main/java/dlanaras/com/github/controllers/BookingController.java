@@ -73,6 +73,9 @@ public class BookingController {
     @GET
     public Response changeBookingStatus(Long id, Boolean accept) {
         Booking booking = bookingService.getBooking(id);
+        if (booking == null)
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
         booking.setIsAccepted(accept);
         bookingService.updateBooking(booking);
         return Response.ok().build();
@@ -81,16 +84,34 @@ public class BookingController {
     @Path("/price/{id}")
     @GET
     public Response getNewestBookingPrice(Long id) {
-        return Response.ok(bookingService.getLatestBookingPrice(id)).build();
+        try {
+            return Response.ok(bookingService.getLatestBookingPrice(id)).build();
+        } catch (NullValueException e) {
+            System.out.println(e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @Path("/cancel/{id}")
     @GET
     public Response cancelBooking(Long id) {
-        //TODO: get user id through claim if not admin
+        // TODO: get user id through claim if not admin
         Booking booking = bookingService.getBooking(id);
+
+        if (booking == null)
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
         booking.setIsAccepted(false);
-        bookingService.updateBooking(booking);
-        return Response.ok().build();
+
+        try {
+            bookingService.updateBooking(booking);
+            return Response.ok().build();
+        } catch (TransactionRequiredException e) {
+            System.out.println(e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 }
